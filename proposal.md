@@ -10,7 +10,7 @@ On the show, contestants compete in various challenges, such as acting, singing,
 
 The show has gained a reputation for promoting inclusivity, diversity, and acceptance, with a large and loyal fan base across the world. The show has also helped to raise awareness of the drag community and has provided a platform for drag queens to showcase their talent and artistry to a wider audience. 
 
-**Our Purpose**<br>
+**Our Purpose:**<br>
 With a large number of drag queens and seasons, it can be difficult for fans to keep track of each queen's performance and progress. The purpose of the app is to provide an interactive and user-friendly platform for fans to answer their research questions and make informed decisions on which drag queens to follow or see in live performances.
 
 # Description of the data
