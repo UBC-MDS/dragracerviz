@@ -15,7 +15,10 @@ With a large number of drag queens and seasons, it can be difficult for fans to 
 
 # Description of the data
 
-With a large number of drag queens and seasons, it can be difficult for fans to keep track of each queen's performance and progress. The purpose of the app is to provide an interactive and user-friendly platform for fans to answer their research questions and make informed decisions on which drag queens to follow or see in live performances.
+Our dashboard will visualize data on about 184 drag queens that have appeared on RuPaul's Drag Race over 14 seasons. We will be using the {dragracer} R package, which provides the following three data sets: `rpdr_contestants`, with contestant-level data, `rpdr_contep`, with contestant and episode level data, and `rpdr_ep` with episode-level data. This package is available on CRAN, and can be found with installation instructions [here](https://cran.r-project.org/web/packages/dragracer/readme/README.html). We will be joining these three data sets into one dataframe containing the main variables of interest. 
+
+The final dataframe, called `rpdr`, will include variables that describe general information on the queens (`contestant`, `age`, `hometown`), the season they appeared on (`season`), and  how they fared throughout their competition (`rank`, `outcome`). The `outcome` describes their status at the end of a particular episode, which are WIN, HIGH, SAFE, LOW, and BTM, from highest to lowest score. In the app, these variables will be portrayed as part of the summary results for the chosen queen. The dataframe will also include some special features, such as whether the queen was eliminated (`eliminated`) or awarded the title "Miss Congeniality" (`missc`), which is given to the kindest queen of the season. We will also derive some additional features from the data that will indicate whether the queens where finalists and/or winners in their respective seasons (`finalist`, `winner`). These special features will act as filters and help our app users to search for a queen of interest based on their desired criteria.
+
 # Research questions and usage scenarios
 
 ## Research questions
