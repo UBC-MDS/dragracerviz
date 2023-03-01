@@ -13,6 +13,12 @@ ui <- fluidPage(
       'Filters',
       selectInput(inputId = "season", label = "Season",
                   choices = unique(drag_df$season)),
+      selectizeInput(
+        inputId = 'queens',
+        label = "Queens",
+        choices = unique(drag_df$contestant),
+        multiple = TRUE
+      ),
       # Other Categories filter
       checkboxGroupInput(inputId = "other_categories", label = "Other Categories",
                          choices = c("Miss Congeniality", "Winner", "Finalist", "First Eliminated"),
@@ -29,6 +35,22 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+  # reactively changes selectable queens based on chosen season
+  observe({
+    req(input$season)
+    
+    # filter data based on chosen season and get unique names
+    filtered_names <- drag_df |> 
+      dplyr::filter(season == input$season) |> 
+      dplyr::select(contestant) |> 
+      unique()
+    
+    updateSelectizeInput(
+      inputId = 'queens',
+      choices = filtered_names
+    )
+  }) |> bindEvent(input$season)
+  
   # reactive expression to filter data based on user selections
   filtered_data <- reactive({
     drag_filtered <- drag_df |>
@@ -41,6 +63,8 @@ server <- function(input, output, session) {
   })
 
   # TBD: Create outcome tally table
+  
+  
 
 }
 
