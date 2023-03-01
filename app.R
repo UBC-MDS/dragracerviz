@@ -65,6 +65,11 @@ server <- function(input, output, session) {
       dplyr::filter(if ("Winner" %in% input$other_categories) winner == 1 else TRUE) |>
       dplyr::filter(if ("Finalist" %in% input$other_categories) finalist == 1 else TRUE) |>
       dplyr::filter(if ("First Eliminated" %in% input$other_categories) first_eliminated == 1 else TRUE)
+    
+    if (!is.null(input$queens)) {
+      drag_filtered <- drag_df |> 
+        dplyr::filter(contestant %in% input$queens)
+    }
     drag_filtered
   })
 
