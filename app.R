@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(DT)
 
 # read in data
 drag_df <- read.csv("data/drag.csv")
@@ -28,7 +29,12 @@ ui <- fluidPage(
     mainPanel(
       'Cool graphs',
       fluidRow(),
-      fluidRow()
+      fluidRow(
+        column(6,
+          h3('Relative Rankings'),
+          dataTableOutput('ranking')
+        )
+      )
     )
   )
 
@@ -65,7 +71,20 @@ server <- function(input, output, session) {
   # TBD: Create outcome tally table
   
   
+  # ranking table
+  output$ranking <- renderDT({
 
+    if (nrow(filtered_data()) != 0) {
+      filtered_data() |> 
+        group_by(contestant) |> 
+        summarise(rank = mean(rank),) |> 
+        select(rank, contestant) |> 
+        arrange(rank)
+    } else { # don't do any filtering if there aren't rows
+      filtered_data()
+    }
+    
+  }, rownames = FALSE)
 }
 
 shinyApp(ui, server)
