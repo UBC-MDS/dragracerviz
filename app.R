@@ -11,6 +11,10 @@ ui <- fluidPage(
     # sidebar (filters)
     sidebarPanel(
       'Filters',
+      # Other Categories filter
+      checkboxGroupInput(inputId = "other_categories", label = "Other Categories",
+                         choices = c("Miss Congeniality", "Winner", "Finalist", "First Eliminated"),
+                         selected = NULL)
     ),
     # main body (graphs)
     mainPanel(
