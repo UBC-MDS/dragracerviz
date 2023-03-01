@@ -81,10 +81,11 @@ server <- function(input, output, session) {
 
     if (nrow(filtered_data()) != 0) {
       filtered_data() |> 
-        group_by(contestant) |> 
-        summarise(rank = mean(rank),) |> 
-        select(rank, contestant) |> 
-        arrange(rank)
+        dplyr::filter(participant == 1) |> 
+        # if season is optional this needs to group by season as well
+        dplyr::group_by(rank, contestant) |> 
+        dplyr::summarise(challenges = n()) |>
+        dplyr::arrange(rank)
     } else { # don't do any filtering if there aren't rows
       filtered_data()
     }
