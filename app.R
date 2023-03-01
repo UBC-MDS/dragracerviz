@@ -3,7 +3,7 @@ library(dplyr)
 library(ggplot2)
 
 # read in data
-data <- read_csv("data/drag.csv")
+data <- read.csv("data/drag.csv")
 
 ui <- fluidPage(
   titlePanel(title = 'Drag Race Visualizer'),
@@ -27,6 +27,17 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+  # reactive expression to filter data based on user selections
+  filtered_data <- reactive({
+    data <- data |>
+      dplyr::filter(if ("Miss Congeniality" %in% input$other_categories) missc == 1 else TRUE) |>
+      dplyr::filter(if ("Winner" %in% input$other_categories) winner == 1 else TRUE) |>
+      dplyr::filter(if ("Finalist" %in% input$other_categories) finalist == 1 else TRUE) |>
+      dplyr::filter(if ("First Eliminated" %in% input$other_categories) first_eliminated == 1 else TRUE)
+    data
+  })
+  
+  # TBD: Create outcome tally table
   
 }
 
