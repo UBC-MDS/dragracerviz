@@ -22,7 +22,13 @@ ui <- fluidPage(
       # Other Categories filter
       checkboxGroupInput(inputId = "other_categories", label = "Other Categories",
                          choices = c("Miss Congeniality", "Winner", "Finalist", "First Eliminated"),
-                         selected = NULL)
+                         selected = NULL),
+      
+      # Age slider filter
+      sliderInput(inputId = "age", label = "Age",
+                  min = min(drag_df$age, na.rm = TRUE),
+                  max = max(drag_df$age, na.rm = TRUE),
+                  value = c(min(drag_df$age, na.rm = TRUE), max(drag_df$age, na.rm = TRUE)))
     ),
     # main body (graphs)
     mainPanel(
@@ -58,7 +64,8 @@ server <- function(input, output, session) {
       dplyr::filter(if ("Miss Congeniality" %in% input$other_categories) missc == 1 else TRUE) |>
       dplyr::filter(if ("Winner" %in% input$other_categories) winner == 1 else TRUE) |>
       dplyr::filter(if ("Finalist" %in% input$other_categories) finalist == 1 else TRUE) |>
-      dplyr::filter(if ("First Eliminated" %in% input$other_categories) first_eliminated == 1 else TRUE)
+      dplyr::filter(if ("First Eliminated" %in% input$other_categories) first_eliminated == 1 else TRUE) |>
+      dplyr::filter(age >= input$age[1] & age <= input$age[2])
     drag_filtered
   })
 
