@@ -73,7 +73,7 @@ main <- function(data, out_dir) {
                            city == "Toronto" ~ 79.3832,
                            city == "Van Nuys" ~ 118.4514,
                            TRUE ~ lng),
-           finalist = case_when((finale == 1 & contestant == 1) ~ 1),
+           finalist = case_when((finale == 1 & participant == 1) ~ 1),
            winner = case_when(rank == 1 ~ 1),
            first_eliminated = case_when((episode == 1 & eliminated == 1) ~ 1,
                                         contestant == "Jaymes Mansfield" ~ 1,
