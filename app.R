@@ -101,7 +101,7 @@ server <- function(input, output, session) {
                 caption = 'Total counts of each outcome over the season.',
                 extensions = 'Scroller',
                 options = list(deferRender = TRUE,
-                               scrollY = 400,
+                               scrollY = 200,
                                scroller = TRUE,
                                searching = FALSE
                 )
