@@ -25,7 +25,7 @@ ui <- fluidPage(
       ),
       # Other Categories filter
       checkboxGroupInput(inputId = "other_categories", label = "Other Categories",
-                         choices = c("Miss Congeniality", "Winner", "Finalist", "First Eliminated"),
+                         choices = c("Finalist", "Miss Congeniality", "Winner", "First Eliminated"),
                          selected = NULL),
 
       # Age slider filter
@@ -36,7 +36,7 @@ ui <- fluidPage(
     ),
     # main body (graphs)
     mainPanel(
-      'Cool graphs',
+
       fluidRow(
         column(6,
                h3("Hometown Map"),
@@ -80,15 +80,16 @@ server <- function(input, output, session) {
   filtered_data <- reactive({
     drag_filtered <- drag_df |>
       dplyr::filter(season == input$season) |>
-      dplyr::filter(if ("Miss Congeniality" %in% input$other_categories) missc == 1 else TRUE) |>
-      dplyr::filter(if ("Winner" %in% input$other_categories) winner == 1 else TRUE) |>
       dplyr::filter(if ("Finalist" %in% input$other_categories) finalist == 1 else TRUE) |>
+      dplyr::filter(if ("Winner" %in% input$other_categories) winner == 1 else TRUE) |>
+      dplyr::filter(if ("Miss Congeniality" %in% input$other_categories) missc == 1 else TRUE) |>
       dplyr::filter(if ("First Eliminated" %in% input$other_categories) first_eliminated == 1 else TRUE) |>
       dplyr::filter(age >= input$age[1] & age <= input$age[2])
 
     if (!is.null(input$queens)) {
       drag_filtered <- drag_df |>
-        dplyr::filter(contestant %in% input$queens)
+        dplyr::filter(contestant %in% input$queens,
+                      season == input$season)
     }
     drag_filtered
   })
@@ -120,28 +121,47 @@ server <- function(input, output, session) {
   output$ranking <- renderDT({
 
     if (nrow(filtered_data()) != 0) {
-      filtered_data() |>
-        dplyr::filter(participant == 1) |>
-        dplyr::group_by(season, rank, contestant) |>
-        dplyr::summarise(challenges = n(), .groups = 'drop') |>
-        dplyr::arrange(rank)
-    } else { # don't do any filtering if there aren't rows
-      filtered_data()
+      clean_data <- filtered_data() |>
+        dplyr::filter(participant == 1) 
+        
+    } else {
+      clean_data <- filtered_data()
     }
-
-  }, rownames = FALSE)
+    clean_data |>
+      dplyr::group_by(season, rank, contestant) |>
+      dplyr::summarise(Challenges = n(), .groups = 'drop') |>
+      dplyr::arrange(rank) |>
+      dplyr::rename(Queen = contestant,
+                    Season = season,
+                    Rank = rank) |>
+      datatable(extensions = 'Scroller',
+                caption = 'Ranking of the queen on their season and how many challenges they participated in on their season.',
+                options = list(deferRender = TRUE,
+                               scrollX = 350,
+                               scrollY = 350,
+                               scroller = TRUE,
+                               searching = FALSE
+                ))
+  })
 
   output$hometown <- renderLeaflet({
-    leaflet(data = filtered_data()) |>
+    if (nrow(filtered_data()) > 0){
+ 
+    map_blank <- leaflet(data = filtered_data()) |>
       addTiles() |>
       addMarkers(
-
         ~lng,
                  ~lat,
                  popup = ~paste(contestant,
                                 "<br>Hometown:", city, ",", state,
                                 "<br>Age on Season:", age),
                  label = ~as.character(contestant))
+    } else {
+      map_blank <- leaflet() |>
+        addTiles() 
+      }
+    map_blank
+      
 })
 
 }
