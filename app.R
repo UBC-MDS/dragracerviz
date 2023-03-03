@@ -12,6 +12,7 @@ ui <- fluidPage(
     # sidebar (filters)
     sidebarPanel(
       'Filters',
+      width = 2,
       selectInput(inputId = "season", label = "Season",
                   choices = unique(drag_df$season)),
       selectizeInput(
