@@ -14,7 +14,9 @@ ui <- fluidPage(
     # sidebar (filters)
     sidebarPanel(
       'Filters',
-      width = 3,
+
+      width = 2,
+
       selectInput(inputId = "season", label = "Season",
                   choices = unique(sort(drag_df$season))),
       selectizeInput(
@@ -45,7 +47,6 @@ ui <- fluidPage(
         column(5,
                h3("Queen Performance"),
                plotlyOutput("queen_challenge")
-        )
         ),
       fluidRow(
         column(6,
@@ -144,6 +145,30 @@ server <- function(input, output, session) {
              legend = list(orientation = "h",
                            xanchor = "center"))
   })
+  
+  # Outcome tally table
+  output$outcome_table <- renderDataTable({
+    data <- filtered_data()
+    data |>
+      dplyr::group_by(contestant) |>
+      dplyr::summarize(WIN = sum(outcome == "WIN", na.rm = TRUE),
+                       HIGH = sum(outcome == "HIGH", na.rm = TRUE),
+                       SAFE = sum(outcome == "SAFE", na.rm = TRUE),
+                       LOW = sum(outcome == "LOW", na.rm = TRUE),
+                       BOTTOM = sum(outcome == "BTM", na.rm = TRUE)) |>
+      dplyr::rename(Queen = contestant) |>
+      datatable(rownames = FALSE,
+                caption = 'Total counts of each outcome over the season.',
+                extensions = 'Scroller',
+                options = list(deferRender = TRUE,
+                               scrollX = 350,
+                               scrollY = 350,
+                               scroller = TRUE,
+                               searching = FALSE
+                )
+      )
+  })
 
+  
 }
 shinyApp(ui, server)
