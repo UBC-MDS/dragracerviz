@@ -80,8 +80,29 @@ server <- function(input, output, session) {
     drag_filtered
   })
 
-  # TBD: Create outcome tally table
-  
+  # Outcome tally table
+  output$outcome_table <- renderDataTable({
+    data <- filtered_data()
+    data |>
+      dplyr::group_by(contestant) |>
+      dplyr::summarize(WIN = sum(outcome == "WIN", na.rm = TRUE),
+                       HIGH = sum(outcome == "HIGH", na.rm = TRUE),
+                       SAFE = sum(outcome == "SAFE", na.rm = TRUE),
+                       LOW = sum(outcome == "LOW", na.rm = TRUE),
+                       BOTTOM = sum(outcome == "BTM", na.rm = TRUE)) |>
+      dplyr::rename(Queen = contestant) |>
+      datatable(rownames = FALSE, 
+                class = 'cell-border stripe',
+                extensions = 'Scroller',
+                options = list(deferRender = TRUE,
+                               scrollY = 400,
+                               scroller = TRUE, 
+                               orderClasses = TRUE,
+                               order = list(list(2, 'desc')),
+                               searching = FALSE
+                )
+      )
+  })
   
   # ranking table
   output$ranking <- renderDT({
