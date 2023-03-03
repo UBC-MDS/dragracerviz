@@ -156,7 +156,7 @@ server <- function(input, output, session) {
       dplyr::arrange(season)
     
     plot_ly(plot_data, x = ~episode, 
-            y = ~factor(outcome, levels= c("BTM", "LOW", "SAFE", "HIGH", "WIN"GIT)), 
+            y = ~factor(outcome, levels= c("BTM", "LOW", "SAFE", "HIGH", "WIN")), 
             color = ~contestant, 
             type = "scatter", 
             mode = "lines+markers") %>%
