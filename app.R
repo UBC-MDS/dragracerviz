@@ -39,6 +39,11 @@ ui <- fluidPage(
         column(6,
           h3('Relative Rankings'),
           dataTableOutput('ranking')
+        ),
+        # Outcome tally table
+        column(width=6,
+               h3('Episode Outcome Counts'),
+               DT::DTOutput(outputId = 'outcome_table')
         )
       )
     )
