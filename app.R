@@ -1,6 +1,7 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
+library(DT)
 
 # read in data
 drag_df <- read.csv("data/drag.csv")
@@ -34,7 +35,12 @@ ui <- fluidPage(
     mainPanel(
       'Cool graphs',
       fluidRow(),
-      fluidRow()
+      fluidRow(
+        column(6,
+          h3('Relative Rankings'),
+          dataTableOutput('ranking')
+        )
+      )
     )
   )
 
@@ -66,13 +72,31 @@ server <- function(input, output, session) {
       dplyr::filter(if ("Finalist" %in% input$other_categories) finalist == 1 else TRUE) |>
       dplyr::filter(if ("First Eliminated" %in% input$other_categories) first_eliminated == 1 else TRUE) |>
       dplyr::filter(age >= input$age[1] & age <= input$age[2])
+      
+    if (!is.null(input$queens)) {
+      drag_filtered <- drag_df |> 
+        dplyr::filter(contestant %in% input$queens)
+    }
     drag_filtered
   })
 
   # TBD: Create outcome tally table
   
   
+  # ranking table
+  output$ranking <- renderDT({
 
+    if (nrow(filtered_data()) != 0) {
+      filtered_data() |> 
+        dplyr::filter(participant == 1) |> 
+        dplyr::group_by(season, rank, contestant) |> 
+        dplyr::summarise(challenges = n(), .groups = 'drop') |>
+        dplyr::arrange(rank)
+    } else { # don't do any filtering if there aren't rows
+      filtered_data()
+    }
+    
+  }, rownames = FALSE)
 }
 
 shinyApp(ui, server)
