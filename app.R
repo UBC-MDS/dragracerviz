@@ -151,11 +151,11 @@ server <- function(input, output, session) {
       addTiles() |>
       addMarkers(
         ~lng,
-                 ~lat,
-                 popup = ~paste(contestant,
-                                "<br>Hometown:", city, ",", state,
-                                "<br>Age on Season:", age),
-                 label = ~as.character(contestant))
+        ~lat,
+        popup = ~paste(contestant,
+                       "<br>Hometown:", city, ",", state,
+                       "<br>Age on Season:", age),
+        label = ~as.character(contestant))
     } else {
       map_blank <- leaflet() |>
         addTiles() 
