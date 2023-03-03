@@ -5,6 +5,7 @@ library(DT)
 library(plotly)
 library(bslib)
 library(leaflet)
+library(thematic)
 
 thematic::thematic_shiny()
 
