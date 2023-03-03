@@ -14,7 +14,9 @@ ui <- fluidPage(
     # sidebar (filters)
     sidebarPanel(
       'Filters',
+
       width = 2,
+
       selectInput(inputId = "season", label = "Season",
                   choices = unique(sort(drag_df$season))),
       selectizeInput(
@@ -38,10 +40,13 @@ ui <- fluidPage(
     mainPanel(
       'Cool graphs',
       fluidRow(
-        column(6,
+        column(7,
                h3("Hometown Map"),
                leafletOutput("hometown")
-               )
+               ),
+        column(5,
+               h3("Queen Performance"),
+               plotlyOutput("queen_challenge")
         ),
       fluidRow(
         column(6,
@@ -92,29 +97,6 @@ server <- function(input, output, session) {
     }
     drag_filtered
   })
-  
-  # Outcome tally table
-  output$outcome_table <- renderDataTable({
-    data <- filtered_data()
-    data |>
-      dplyr::group_by(contestant) |>
-      dplyr::summarize(WIN = sum(outcome == "WIN", na.rm = TRUE),
-                       HIGH = sum(outcome == "HIGH", na.rm = TRUE),
-                       SAFE = sum(outcome == "SAFE", na.rm = TRUE),
-                       LOW = sum(outcome == "LOW", na.rm = TRUE),
-                       BOTTOM = sum(outcome == "BTM", na.rm = TRUE)) |>
-      dplyr::rename(Queen = contestant) |>
-      datatable(rownames = FALSE,
-                caption = 'Total counts of each outcome over the season.',
-                extensions = 'Scroller',
-                options = list(deferRender = TRUE,
-                               scrollX = 350,
-                               scrollY = 350,
-                               scroller = TRUE,
-                               searching = FALSE
-                )
-      )
-  })
 
   # ranking table
   output$ranking <- renderDT({
@@ -143,6 +125,50 @@ server <- function(input, output, session) {
                                 "<br>Age on Season:", age),
                  label = ~as.character(contestant))
 })
+  
+  output$queen_challenge <- renderPlotly({
+    plot_data <- filtered_data()  %>%
+      dplyr::group_by(contestant, season, episode) %>%
+      dplyr::summarise(
+        outcome = if_else(outcome == "ELIM", "ELIMINATED", outcome),
+        outcome = if_else(is.na(outcome), "SAFE", outcome)) %>%
+      dplyr::arrange(season)
+    
+    plot_ly(plot_data, x = ~episode, 
+            y = ~outcome, 
+            color = ~contestant, 
+            type = "scatter", 
+            mode = "lines+markers") %>%
+      layout(title = "Performance of Queen over time",
+             xaxis = list(title = "Episodes"),
+             yaxis = list(title = "Performance"),
+             legend = list(orientation = "h",
+                           xanchor = "center"))
+  })
+  
+  # Outcome tally table
+  output$outcome_table <- renderDataTable({
+    data <- filtered_data()
+    data |>
+      dplyr::group_by(contestant) |>
+      dplyr::summarize(WIN = sum(outcome == "WIN", na.rm = TRUE),
+                       HIGH = sum(outcome == "HIGH", na.rm = TRUE),
+                       SAFE = sum(outcome == "SAFE", na.rm = TRUE),
+                       LOW = sum(outcome == "LOW", na.rm = TRUE),
+                       BOTTOM = sum(outcome == "BTM", na.rm = TRUE)) |>
+      dplyr::rename(Queen = contestant) |>
+      datatable(rownames = FALSE,
+                caption = 'Total counts of each outcome over the season.',
+                extensions = 'Scroller',
+                options = list(deferRender = TRUE,
+                               scrollX = 350,
+                               scrollY = 350,
+                               scroller = TRUE,
+                               searching = FALSE
+                )
+      )
+  })
 
+  
 }
 shinyApp(ui, server)
