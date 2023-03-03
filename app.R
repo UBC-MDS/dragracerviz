@@ -14,6 +14,7 @@ ui <- fluidPage(
     # sidebar (filters)
     sidebarPanel(
       'Filters',
+      width = 2,
       selectInput(inputId = "season", label = "Season",
                   choices = unique(sort(drag_df$season))),
       selectizeInput(
@@ -46,6 +47,11 @@ ui <- fluidPage(
         column(6,
           h3('Relative Rankings'),
           dataTableOutput('ranking')
+        ),
+        # Outcome tally table
+        column(width=6,
+               h3('Outcome Tallies'),
+               DT::DTOutput(outputId = 'outcome_table')
         )
       )
     )
@@ -86,9 +92,6 @@ server <- function(input, output, session) {
     }
     drag_filtered
   })
-
-  # TBD: Create outcome tally table
-
 
   # ranking table
   output$ranking <- renderDT({
