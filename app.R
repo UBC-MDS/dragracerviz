@@ -43,7 +43,7 @@ ui <- fluidPage(
         ),
         # Outcome tally table
         column(width=6,
-               h3('Episode Outcome Counts'),
+               h3('Outcome Tallies'),
                DT::DTOutput(outputId = 'outcome_table')
         )
       )
@@ -97,14 +97,12 @@ server <- function(input, output, session) {
                        LOW = sum(outcome == "LOW", na.rm = TRUE),
                        BOTTOM = sum(outcome == "BTM", na.rm = TRUE)) |>
       dplyr::rename(Queen = contestant) |>
-      datatable(rownames = FALSE, 
-                class = 'cell-border stripe',
+      datatable(rownames = FALSE,
+                caption = 'Total counts of each outcome over the season.',
                 extensions = 'Scroller',
                 options = list(deferRender = TRUE,
                                scrollY = 400,
-                               scroller = TRUE, 
-                               orderClasses = TRUE,
-                               order = list(list(2, 'desc')),
+                               scroller = TRUE,
                                searching = FALSE
                 )
       )
