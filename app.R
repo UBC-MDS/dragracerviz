@@ -3,6 +3,7 @@ library(dplyr)
 library(ggplot2)
 library(DT)
 library(leaflet)
+library(plotly)
 
 
 # read in data
@@ -62,6 +63,7 @@ ui <- fluidPage(
     )
   )
 
+)
 )
 
 server <- function(input, output, session) {
@@ -150,12 +152,11 @@ server <- function(input, output, session) {
     plot_data <- filtered_data()  %>%
       dplyr::group_by(contestant, season, episode) %>%
       dplyr::summarise(
-        outcome = if_else(outcome == "ELIM", "ELIMINATED", outcome),
-        outcome = if_else(is.na(outcome), "SAFE", outcome)) %>%
+        outcome = if_else(outcome == "ELIM", "ELIMINATED", outcome)) %>%
       dplyr::arrange(season)
     
     plot_ly(plot_data, x = ~episode, 
-            y = ~outcome, 
+            y = ~factor(outcome, levels= c("BTM", "LOW", "SAFE", "HIGH", "WIN"GIT)), 
             color = ~contestant, 
             type = "scatter", 
             mode = "lines+markers") %>%
