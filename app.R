@@ -2,22 +2,32 @@ library(shiny)
 library(dplyr)
 library(ggplot2)
 library(DT)
-library(leaflet)
 library(plotly)
+library(bslib)
+library(leaflet)
 
+thematic::thematic_shiny()
+
+custom_theme <- bs_theme(
+  version = 5,
+  bg = "#FFFFFF",
+  fg = "#FF1D8E",
+  primary = "#FF1D8E",
+  secondary = "#FF374B",
+  heading_font = font_google("Lobster"),
+  base_font = font_google("Signika Negative")
+)
 
 # read in data
 drag_df <- read.csv("data/drag.csv")
-
 ui <- fluidPage(
-  titlePanel(title = 'Drag Race Visualizer'),
+  theme = custom_theme,
+  titlePanel(title = div(img(src ="logo.png", height = 100), 'Drag Race Visualizer')),
   sidebarLayout(
     # sidebar (filters)
     sidebarPanel(
       'Filters',
-
       width = 2,
-
       selectInput(inputId = "season", label = "Season",
                   choices = unique(sort(drag_df$season))),
       selectizeInput(
@@ -39,7 +49,6 @@ ui <- fluidPage(
     ),
     # main body (graphs)
     mainPanel(
-
       fluidRow(
         column(7,
                h3("Hometown Map"),
@@ -52,19 +61,20 @@ ui <- fluidPage(
       fluidRow(
         column(6,
           h3('Relative Rankings'),
+          'Ranking of the queen on their season and how many challenges they participated in on their season.',
           dataTableOutput('ranking')
         ),
         # Outcome tally table
         column(width=6,
                h3('Outcome Tallies'),
+               'Total counts of each outcome over the season.',
                DT::DTOutput(outputId = 'outcome_table')
         )
       )
     )
   )
+))
 
-)
-)
 
 server <- function(input, output, session) {
   # reactively changes selectable queens based on chosen season
@@ -119,7 +129,7 @@ server <- function(input, output, session) {
                     Season = season,
                     Rank = rank) |>
       datatable(extensions = 'Scroller',
-                caption = 'Ranking of the queen on their season and how many challenges they participated in on their season.',
+                #caption = 'Ranking of the queen on their season and how many challenges they participated in on their season.',
                 options = list(deferRender = TRUE,
                                scrollX = 350,
                                scrollY = 350,
@@ -130,7 +140,6 @@ server <- function(input, output, session) {
 
   output$hometown <- renderLeaflet({
     if (nrow(filtered_data()) > 0){
- 
     map_blank <- leaflet(data = filtered_data()) |>
       addTiles() |>
       addMarkers(
@@ -179,7 +188,7 @@ server <- function(input, output, session) {
                        BOTTOM = sum(outcome == "BTM", na.rm = TRUE)) |>
       dplyr::rename(Queen = contestant) |>
       datatable(rownames = FALSE,
-                caption = 'Total counts of each outcome over the season.',
+                #caption = 'Total counts of each outcome over the season.',
                 extensions = 'Scroller',
                 options = list(deferRender = TRUE,
                                scrollX = 350,
@@ -190,6 +199,6 @@ server <- function(input, output, session) {
       )
   })
 
-  
+
 }
 shinyApp(ui, server)
