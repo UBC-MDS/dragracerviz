@@ -1,11 +1,31 @@
 # dragracerviz
 
+This dashboard is hosted on `shinyapps.io`, [here](https://wispyisle.shinyapps.io/dragracer-dashboard/).
+
 ## Contributors
 
 -   Marian Agyby
 -   Shaun Hutchinson
 -   Dhruvi Nishar
 -   Caroline Tang
+
+## Motivation
+
+With each new season of RuPaul's Drag Race, it can be harder to keep track of how well each contestant did on their respective season. On the original US version of the show alone, there have been 14 completed seasons and over 180+ drag queens who have competed on the show. Since appearing on the show, many of these queens' drag shows have increased in popularity, and some have also gone on tours.
+
+Fans of the show may be interested in going to watch some of these queens perform live, whether it is a queen from their hometown, or someone going on tour. However, with so many queens, and a limited budget to spend on tickets to shows, it may help to see how well queens performed on the show to determine who to go watch.
+
+They may also have questions such as:
+
+1.  What was the progression of each drag queen on each season?
+
+2.  Which drag queen has the the most wins across all seasons?
+
+3.  Who was the youngest drag queen on any season?
+
+4.  Which drag queens came from each state?
+
+This app will visualize the performance of a queen during their season, and allows users to compare different queens within a particular season. Users will also be able to see what cities the different queens are from.
 
 ## App Description
 
