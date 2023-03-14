@@ -50,6 +50,7 @@ ui <- fluidPage(
     ),
     # main body (graphs)
     mainPanel(
+      width = 10,
       fluidRow(
         column(7,
                h3("Hometown Map"),
@@ -141,7 +142,7 @@ server <- function(input, output, session) {
 
   output$hometown <- renderLeaflet({
     if (nrow(filtered_data()) > 0){
-    map_blank <- leaflet(data = filtered_data()) |>
+    map_blank <- leaflet(data = filtered_data()%>% distinct(lng, lat, contestant, .keep_all = TRUE)) |>
       addTiles() |>
       addMarkers(
         ~lng,
@@ -149,7 +150,8 @@ server <- function(input, output, session) {
         popup = ~paste(contestant,
                        "<br>Hometown:", city, ",", state,
                        "<br>Age on Season:", age),
-        label = ~as.character(contestant))
+        label = ~as.character(contestant),
+        clusterOptions = markerClusterOptions())
     } else {
       map_blank <- leaflet() |>
         addTiles() 
