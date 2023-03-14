@@ -50,6 +50,7 @@ ui <- fluidPage(
     ),
     # main body (graphs)
     mainPanel(
+      width = 10,
       fluidRow(
         column(7,
                h3("Hometown Map"),
