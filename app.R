@@ -29,12 +29,13 @@ ui <- fluidPage(
     sidebarPanel(
       'Filters',
       width = 2,
-      selectInput(inputId = "season", label = "Season",
-                  choices = unique(sort(drag_df$season))),
+      selectizeInput(inputId = "season", label = "Season",
+                  choices = unique(sort(drag_df$season)),
+                  multiple = TRUE),
       selectizeInput(
         inputId = 'queens',
         label = "Queens",
-        choices = unique(drag_df$contestant),
+        choices = sort(unique(drag_df$contestant)),
         multiple = TRUE
       ),
       # Other Categories filter
@@ -81,14 +82,17 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   # reactively changes selectable queens based on chosen season
   observe({
-    req(input$season)
-
     # filter data based on chosen season and get unique names
-    filtered_names <- drag_df |>
-      dplyr::filter(season == input$season) |>
-      dplyr::select(contestant) |>
-      unique()
-
+    if (!is.null(input$season)) {
+      filtered_names <- drag_df |>
+        dplyr::filter(season %in% input$season) |>
+        dplyr::select(contestant) |>
+        unique() |> 
+        arrange(contestant)
+    } else {
+      filtered_names <- sort(unique(drag_df$contestant))
+    }
+      
     updateSelectizeInput(
       inputId = 'queens',
       choices = filtered_names
@@ -97,18 +101,23 @@ server <- function(input, output, session) {
 
   # reactive expression to filter data based on user selections
   filtered_data <- reactive({
-    drag_filtered <- drag_df |>
-      dplyr::filter(season == input$season) |>
-      dplyr::filter(if ("Finalist" %in% input$other_categories) finalist == 1 else TRUE) |>
-      dplyr::filter(if ("Winner" %in% input$other_categories) winner == 1 else TRUE) |>
-      dplyr::filter(if ("Miss Congeniality" %in% input$other_categories) missc == 1 else TRUE) |>
-      dplyr::filter(if ("First Eliminated" %in% input$other_categories) first_eliminated == 1 else TRUE) |>
-      dplyr::filter(age >= input$age[1] & age <= input$age[2])
+    drag_filtered <- drag_df
+    # optional season iflter
+    if (!is.null(input$season)) {
+      drag_filtered <- drag_filtered |> 
+        dplyr::filter(season %in% input$season)
+    }
+    
+    # dplyr::filter(if ("Finalist" %in% input$other_categories) finalist == 1 else TRUE) |>
+    # dplyr::filter(if ("Winner" %in% input$other_categories) winner == 1 else TRUE) |>
+    # dplyr::filter(if ("Miss Congeniality" %in% input$other_categories) missc == 1 else TRUE) |>
+    # dplyr::filter(if ("First Eliminated" %in% input$other_categories) first_eliminated == 1 else TRUE) |>
+    # dplyr::filter(age >= input$age[1] & age <= input$age[2])
 
     if (!is.null(input$queens)) {
       drag_filtered <- drag_df |>
         dplyr::filter(contestant %in% input$queens,
-                      season == input$season)
+                      season %in% input$season)
     }
     drag_filtered
   })
@@ -153,23 +162,23 @@ server <- function(input, output, session) {
         label = ~as.character(contestant))
     } else {
       map_blank <- leaflet() |>
-        addTiles() 
+        addTiles()
       }
     map_blank
-      
+
 })
-  
+
   output$queen_challenge <- renderPlotly({
     plot_data <- filtered_data()  %>%
       dplyr::group_by(contestant, season, episode) %>%
       dplyr::summarise(
         outcome = if_else(outcome == "ELIM", "ELIMINATED", outcome)) %>%
       dplyr::arrange(season)
-    
-    plot_ly(plot_data, x = ~episode, 
-            y = ~factor(outcome, levels= c("BTM", "LOW", "SAFE", "HIGH", "WIN")), 
-            color = ~contestant, 
-            type = "scatter", 
+
+    plot_ly(plot_data, x = ~episode,
+            y = ~factor(outcome, levels= c("BTM", "LOW", "SAFE", "HIGH", "WIN")),
+            color = ~contestant,
+            type = "scatter",
             mode = "lines+markers") %>%
       layout(title = "Performance of Queen over time",
              xaxis = list(title = "Episodes"),
