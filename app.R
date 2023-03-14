@@ -142,7 +142,9 @@ server <- function(input, output, session) {
 
   output$hometown <- renderLeaflet({
     if (nrow(filtered_data()) > 0){
-    map_blank <- leaflet(data = filtered_data()%>% distinct(lng, lat, contestant, .keep_all = TRUE)) |>
+    map_blank <- leaflet(data = filtered_data() |>
+                           distinct(lng, lat, contestant, .keep_all = TRUE)) |>
+      leaflet::setView(lng = -95.7129, lat = 37.0902, zoom = 3) |>
       addTiles() |>
       addMarkers(
         ~lng,
