@@ -40,7 +40,12 @@ ui <- fluidPage(
       ),
       # Other Categories filter
       checkboxGroupInput(inputId = "other_categories", label = "Other Categories",
-                         choices = c("Finalist", "Miss Congeniality", "Winner", "First Eliminated"),
+                         choices = c(
+                           Finalist = 'finalist', 
+                           `Miss Congeniality` = 'missc', 
+                           `Winner` = 'winner', 
+                           `First Eliminated` = 'first_eliminated'
+                          ),
                          selected = NULL),
 
       # Age slider filter
@@ -102,18 +107,22 @@ server <- function(input, output, session) {
   # reactive expression to filter data based on user selections
   filtered_data <- reactive({
     drag_filtered <- drag_df
-    # optional season iflter
+    # optional season filter
     if (!is.null(input$season)) {
       drag_filtered <- drag_filtered |> 
         dplyr::filter(season %in% input$season)
     }
     
-    # dplyr::filter(if ("Finalist" %in% input$other_categories) finalist == 1 else TRUE) |>
-    # dplyr::filter(if ("Winner" %in% input$other_categories) winner == 1 else TRUE) |>
-    # dplyr::filter(if ("Miss Congeniality" %in% input$other_categories) missc == 1 else TRUE) |>
-    # dplyr::filter(if ("First Eliminated" %in% input$other_categories) first_eliminated == 1 else TRUE) |>
-    # dplyr::filter(age >= input$age[1] & age <= input$age[2])
-
+    # optional categories (union of groups instead of intersection)
+    if (!is.null(input$other_categories)) {
+      drag_filtered <- drag_filtered |> 
+        filter(if_any(input$other_categories, function(x) x == 1))
+    }
+    
+    # age filter always applies
+    drag_filtered <- drag_filtered |> dplyr::filter(age >= input$age[1] & age <= input$age[2])
+    
+    # name filter separate
     if (!is.null(input$queens)) {
       drag_filtered <- drag_df |>
         dplyr::filter(contestant %in% input$queens,
