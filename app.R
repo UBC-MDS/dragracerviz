@@ -36,6 +36,7 @@ ui <- fluidPage(
         inputId = 'queens',
         label = "Queens",
         choices = sort(unique(drag_df$contestant)),
+        selected = c('Jinkx Monsoon'),
         multiple = TRUE
       ),
       # Other Categories filter
@@ -89,20 +90,32 @@ server <- function(input, output, session) {
   observe({
     # filter data based on chosen season and get unique names
     if (!is.null(input$season)) {
-      filtered_names <- drag_df |>
-        dplyr::filter(season %in% input$season) |>
+      seasoned <- drag_df |>
+        dplyr::filter(season %in% input$season)
+        
+      filtered_names <- seasoned |> 
         dplyr::select(contestant) |>
         unique() |> 
-        arrange(contestant)
+        dplyr::arrange(contestant)
+      
+      selected_names <- seasoned |> 
+        dplyr::select(contestant, rank) |> 
+        unique() |> 
+        dplyr::arrange(rank) |> 
+        dplyr::select(contestant) |> 
+        dplyr::slice(1:2) |> 
+        dplyr::pull()
     } else {
       filtered_names <- sort(unique(drag_df$contestant))
+      selected_names <- 'Jinkx Monsoon'
     }
       
     updateSelectizeInput(
       inputId = 'queens',
-      choices = filtered_names
+      choices = filtered_names,
+      selected = selected_names
     )
-  }) |> bindEvent(input$season)
+  }) |> bindEvent(input$season, ignoreNULL = FALSE)
 
   # reactive expression to filter data based on user selections
   filtered_data <- reactive({
@@ -125,8 +138,7 @@ server <- function(input, output, session) {
     # name filter separate
     if (!is.null(input$queens)) {
       drag_filtered <- drag_df |>
-        dplyr::filter(contestant %in% input$queens,
-                      season %in% input$season)
+        dplyr::filter(contestant %in% input$queens)
     }
     drag_filtered
   })
@@ -181,7 +193,7 @@ server <- function(input, output, session) {
     plot_data <- filtered_data()  %>%
       dplyr::group_by(contestant, season, episode) %>%
       dplyr::summarise(
-        outcome = if_else(outcome == "ELIM", "ELIMINATED", outcome)) %>%
+        outcome = if_else(outcome == "ELIM", "ELIMINATED", outcome), .groups = 'drop') %>%
       dplyr::arrange(season)
 
     plot_ly(plot_data, x = ~episode,
@@ -205,7 +217,8 @@ server <- function(input, output, session) {
                        HIGH = sum(outcome == "HIGH", na.rm = TRUE),
                        SAFE = sum(outcome == "SAFE", na.rm = TRUE),
                        LOW = sum(outcome == "LOW", na.rm = TRUE),
-                       BOTTOM = sum(outcome == "BTM", na.rm = TRUE)) |>
+                       BOTTOM = sum(outcome == "BTM", na.rm = TRUE),
+                       .groups = 'drop') |>
       dplyr::rename(Queen = contestant) |>
       datatable(rownames = FALSE,
                 #caption = 'Total counts of each outcome over the season.',
