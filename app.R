@@ -31,13 +31,15 @@ ui <- fluidPage(
       width = 2,
       selectizeInput(inputId = "season", label = "Season",
                   choices = unique(sort(drag_df$season)),
-                  multiple = TRUE),
+                  multiple = TRUE,
+                  options = list(plugins = list('remove_button'))),
       selectizeInput(
         inputId = 'queens',
         label = "Queens",
         choices = sort(unique(drag_df$contestant)),
         selected = c('Jinkx Monsoon'),
-        multiple = TRUE
+        multiple = TRUE,
+        options = list(plugins = list('remove_button'))
       ),
       # Other Categories filter
       checkboxGroupInput(inputId = "other_categories", label = "Other Categories",
