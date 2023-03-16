@@ -56,7 +56,10 @@ ui <- fluidPage(
       sliderInput(inputId = "age", label = "Age",
                   min = min(drag_df$age, na.rm = TRUE),
                   max = max(drag_df$age, na.rm = TRUE),
-                  value = c(min(drag_df$age, na.rm = TRUE), max(drag_df$age, na.rm = TRUE)))
+                  value = c(min(drag_df$age, na.rm = TRUE), max(drag_df$age, na.rm = TRUE))),
+      
+      # Reset button
+      actionButton(inputId = "reset", label = "Reset Filters")
     ),
     # main body (graphs)
     mainPanel(
@@ -148,6 +151,14 @@ server <- function(input, output, session) {
         dplyr::filter(contestant %in% input$queens)
     }
     drag_filtered
+  })
+
+  # return filters to default with reset button
+  observeEvent(input$reset, {
+    updateSelectizeInput(session, "queens", selected = 'Jinkx Monsoon')
+    updateSelectInput(session, "season", selected = NA)
+    updateSliderInput(session, "age", value = c(min(drag_df$age, na.rm = TRUE), max(drag_df$age, na.rm = TRUE)))
+    updateCheckboxGroupInput(session, "other_categories", selected = NA)
   })
 
   # ranking table
