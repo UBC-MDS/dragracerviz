@@ -6,6 +6,7 @@ library(plotly)
 library(bslib)
 library(leaflet)
 library(thematic)
+library(shinycssloaders)
 
 thematic::thematic_shiny()
 
@@ -55,7 +56,10 @@ ui <- fluidPage(
       sliderInput(inputId = "age", label = "Age",
                   min = min(drag_df$age, na.rm = TRUE),
                   max = max(drag_df$age, na.rm = TRUE),
-                  value = c(min(drag_df$age, na.rm = TRUE), max(drag_df$age, na.rm = TRUE)))
+                  value = c(min(drag_df$age, na.rm = TRUE), max(drag_df$age, na.rm = TRUE))),
+      
+      # Reset button
+      actionButton(inputId = "reset", label = "Reset Filters")
     ),
     # main body (graphs)
     mainPanel(
@@ -63,23 +67,27 @@ ui <- fluidPage(
       fluidRow(
         column(7,
                h3("Hometown Map"),
-               leafletOutput("hometown")
+               withSpinner(leafletOutput("hometown"),
+                           color = "#FF1D8E")
                ),
         column(5,
                h3("Queen Performance"),
-               plotlyOutput("queen_challenge")
+               withSpinner(plotlyOutput("queen_challenge"),
+                           color = "#FF1D8E")
         ),
       fluidRow(
         column(6,
           h3('Relative Rankings'),
           'Ranking of the queen on their season and how many challenges they participated in on their season.',
-          dataTableOutput('ranking')
+          withSpinner(dataTableOutput('ranking'),
+                      color = "#FF1D8E")
         ),
         # Outcome tally table
         column(width=6,
                h3('Outcome Tallies'),
                'Total counts of each outcome over the season.',
-               DT::DTOutput(outputId = 'outcome_table')
+               withSpinner(DT::DTOutput(outputId = 'outcome_table'),
+                           color = "#FF1D8E")
         )
       )
     )
@@ -143,6 +151,14 @@ server <- function(input, output, session) {
         dplyr::filter(contestant %in% input$queens)
     }
     drag_filtered
+  })
+
+  # return filters to default with reset button
+  observeEvent(input$reset, {
+    updateSelectizeInput(session, "queens", selected = 'Jinkx Monsoon')
+    updateSelectInput(session, "season", selected = NA)
+    updateSliderInput(session, "age", value = c(min(drag_df$age, na.rm = TRUE), max(drag_df$age, na.rm = TRUE)))
+    updateCheckboxGroupInput(session, "other_categories", selected = NA)
   })
 
   # ranking table
