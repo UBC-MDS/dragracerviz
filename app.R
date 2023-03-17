@@ -219,30 +219,35 @@ server <- function(input, output, session) {
 })
 
   output$queen_challenge <- renderPlotly({
-    
+  
     # Filter the data to only include the top performers
     plot_data <- filtered_data()
       
     plot_data %>% 
       dplyr::group_by(contestant, season, episode) %>%
-      dplyr::summarise(outcome = if_else(outcome == "ELIM", "ELIMINATED", outcome), .groups = 'drop') %>%
+      dplyr::summarise(outcome = if_else(outcome == "ELIM", "ELIMINATED", outcome)) %>%
       dplyr::arrange(season) %>%
+      dplyr::top_n(10, contestant) %>%
       plot_ly(x = ~episode,
             y = ~factor(outcome, levels= c("BTM", "LOW", "SAFE", "HIGH", "WIN")),
             color = ~contestant,
             type = "scatter",
             mode = "lines+markers") %>%
       layout(xaxis = list(title = ""),
-             yaxis = list(title = ""),
+             yaxis = list(title = "",
+                          tickfont=list(size=10, 
+                                    family=font_google("Signika Negative"),
+                                    color="#FF1D8E")),
              legend = list(orientation = "h",
                            xanchor = "center",
                            x = 0.5,
                            y = -0.1,
-                           font = list(size = 10),
                            itemsizing = "constant",
-                           itemwidth = 80,
+                           itemwidth = 40,
                            itemclick = "toggle",
-                           itemdoubleclick = "toggleothers"))
+                           itemdoubleclick = "toggleothers",
+                           font=list(size=8, 
+                                     family=font_google("Signika Negative"))))
   })
   
   # Outcome tally table
