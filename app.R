@@ -72,13 +72,13 @@ ui <- fluidPage(
     mainPanel(
       width = 10,
       fluidRow(
-        column(7,
+        column(6,
                h3("Hometown Map"),
                'Click on markers for more information on the queens',
                withSpinner(leafletOutput("hometown"),
                            color = "#FF1D8E")
                ),
-        column(5,
+        column(6,
                h3("Queen Performance"),
                'Queen performance over the episodes (If number of queens > 10, top 10 displayed)',
                withSpinner(plotlyOutput("queen_challenge"),
@@ -158,8 +158,8 @@ server <- function(input, output, session) {
     # update the age slider with the min and max values of the filtered data
     updateSliderInput(session = session, 
                       inputId = "age",
-                      min = min(drag_filtered$age, na.rm = TRUE),
-                      max = max(drag_filtered$age, na.rm = TRUE),
+                      min = min(drag_df$age, na.rm = TRUE),
+                      max = max(drag_df$age, na.rm = TRUE),
                       value = c(min(drag_filtered$age, na.rm = TRUE), max(drag_filtered$age, na.rm = TRUE)))
     
     # name filter separate
