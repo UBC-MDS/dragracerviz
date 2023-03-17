@@ -19,6 +19,12 @@ custom_theme <- bs_theme(
   base_font = font_google("Signika Negative")
 )
 
+rupaulIcon <- makeIcon(
+  iconUrl = "rupaul.png",
+  iconWidth = 60, iconHeight = 70,
+  iconAnchorX = 22, iconAnchorY = 94
+)
+
 # read in data
 drag_df <- read.csv("data/drag.csv")
 ui <- fluidPage(
@@ -54,6 +60,7 @@ ui <- fluidPage(
       fluidRow(
         column(7,
                h3("Hometown Map"),
+               'Click on markers for more information on the queens',
                leafletOutput("hometown")
                ),
         column(5,
@@ -149,6 +156,7 @@ server <- function(input, output, session) {
       addMarkers(
         ~lng,
         ~lat,
+        icon = rupaulIcon,
         popup = ~paste(contestant,
                        "<br>Hometown:", city, ",", state,
                        "<br>Age on Season:", age),
