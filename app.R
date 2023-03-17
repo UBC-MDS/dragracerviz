@@ -24,7 +24,7 @@ custom_theme <- bs_theme(
 drag_df <- read.csv("data/drag.csv")
 ui <- fluidPage(
   theme = custom_theme,
-  titlePanel(title = div(img(src ="logo.png", height = 100), 'Drag Race Visualizer', style = "font-size:60px;")),
+  titlePanel(title = div(img(src ="logo.png", height = 100), 'Drag Race Visualizer', style = "font-size:55px;")),
   sidebarLayout(
     # sidebar (filters)
     sidebarPanel(
