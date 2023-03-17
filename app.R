@@ -20,6 +20,12 @@ custom_theme <- bs_theme(
   base_font = font_google("Signika Negative")
 )
 
+rupaulIcon <- makeIcon(
+  iconUrl = "rupaul.png",
+  iconWidth = 60, iconHeight = 70,
+  iconAnchorX = 22, iconAnchorY = 94
+)
+
 # read in data
 drag_df <- read.csv("data/drag.csv")
 ui <- fluidPage(
@@ -67,6 +73,7 @@ ui <- fluidPage(
       fluidRow(
         column(7,
                h3("Hometown Map"),
+               'Click on markers for more information on the queens',
                withSpinner(leafletOutput("hometown"),
                            color = "#FF1D8E")
                ),
@@ -190,15 +197,19 @@ server <- function(input, output, session) {
 
   output$hometown <- renderLeaflet({
     if (nrow(filtered_data()) > 0){
-    map_blank <- leaflet(data = filtered_data()) |>
+    map_blank <- leaflet(data = filtered_data() |>
+                           distinct(lng, lat, contestant, .keep_all = TRUE)) |>
+      leaflet::setView(lng = -95.7129, lat = 37.0902, zoom = 3) |>
       addTiles() |>
       addMarkers(
         ~lng,
         ~lat,
+        icon = rupaulIcon,
         popup = ~paste(contestant,
                        "<br>Hometown:", city, ",", state,
                        "<br>Age on Season:", age),
-        label = ~as.character(contestant))
+        label = ~as.character(contestant),
+        clusterOptions = markerClusterOptions())
     } else {
       map_blank <- leaflet() |>
         addTiles()
