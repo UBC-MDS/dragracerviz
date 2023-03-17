@@ -80,7 +80,7 @@ ui <- fluidPage(
                ),
         column(5,
                h3("Queen Performance"),
-               'Top 10 Queens over the Episodes',
+               'Queen performance over the episodes (If number of queens > 10, top 10 displayed)',
                withSpinner(plotlyOutput("queen_challenge"),
                            color = "#FF1D8E")
         ),
