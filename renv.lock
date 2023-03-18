@@ -741,7 +741,7 @@
     },
     "htmlwidgets": {
       "Package": "htmlwidgets",
-      "Version": "1.6.2",
+      "Version": "1.6.1",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -751,8 +751,7 @@
         "knitr",
         "rmarkdown",
         "yaml"
-      ],
-      "Hash": "a865aa85bcb2697f47505bfd70422471"
+      ]
     },
     "httpuv": {
       "Package": "httpuv",
