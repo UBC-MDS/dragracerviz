@@ -61,7 +61,7 @@ Note that all contributions must abide by our [guidelines](CONTRIBUTING.md) and 
 - Open the project in RStudio.
 - Install the necessary packages by running 
 ```
-install.packages(c("shiny", "shinydashboard", "tidyverse", "leaflet", "plotly", "DT", "viridis"))
+install.packages(c("shiny", "shinydashboard", "tidyverse", "leaflet", "plotly", "DT", "viridis", "thematic", "bslib", "shnycssloaders", "shinytest2"))
 ```
 - Run the app by clicking the 'Run App' button in the RStudio console.
 
