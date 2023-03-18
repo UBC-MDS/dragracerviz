@@ -8,6 +8,7 @@ library(leaflet)
 library(thematic)
 library(shinycssloaders)
 library(shinytest2)
+library(rsconnect)
 
 thematic::thematic_shiny()
 
