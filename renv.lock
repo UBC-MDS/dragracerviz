@@ -1622,8 +1622,7 @@
         "shiny",
         "testthat",
         "withr"
-      ],
-      "Hash": "da29b51211b28a7180977d94b638127e"
+      ]
     }
     }
   }
