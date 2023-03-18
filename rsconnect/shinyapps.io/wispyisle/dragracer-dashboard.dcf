@@ -1,0 +1,13 @@
+name: dragracer-dashboard
+title: dragracer-dashboard
+username:
+account: wispyisle
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 8473352
+bundleId: 6964886
+url: https://wispyisle.shinyapps.io/dragracer-dashboard/
+when: 1678951716.88233
+lastSyncTime: 1678951716.88234
+asMultiple: FALSE
+asStatic: FALSE
