@@ -17,13 +17,13 @@ custom_theme <- bs_theme(
   primary = "#FF1D8E",
   secondary = "#FF374B",
   heading_font = font_google("Lobster"),
-  base_font = font_google("Signika Negative")
+  base_font = font_google("Montserrat")
 )
 
 rupaulIcon <- makeIcon(
   iconUrl = "rupaul.png",
   iconWidth = 60, iconHeight = 70,
-  iconAnchorX = 22, iconAnchorY = 94
+  iconAnchorX = 22, iconAnchorY = 70
 )
 
 # read in data
@@ -34,8 +34,8 @@ ui <- fluidPage(
   sidebarLayout(
     # sidebar (filters)
     sidebarPanel(
-      'Filters',
       width = 2,
+      h3('Filters'),
       selectizeInput(inputId = "season", label = "Season",
                   choices = unique(sort(drag_df$season)),
                   multiple = TRUE,
