@@ -1,0 +1,277 @@
+{
+  "output": {
+    "queen_challenge": {
+      "x": {
+        "layout": {
+          "margin": {
+            "b": 40,
+            "l": 60,
+            "t": 25,
+            "r": 10
+          },
+          "xaxis": {
+            "domain": [
+              0,
+              1
+            ],
+            "automargin": true,
+            "title": ""
+          },
+          "yaxis": {
+            "domain": [
+              0,
+              1
+            ],
+            "automargin": true,
+            "title": "",
+            "tickfont": {
+              "size": 10,
+              "family": {
+                "families": "'Signika Negative'",
+                "html_deps": [
+                  "function () ",
+                  "dep_func(x)"
+                ],
+                "default_flag": true
+              },
+              "color": "#FF1D8E"
+            },
+            "type": "category",
+            "categoryorder": "array",
+            "categoryarray": [
+              "BTM",
+              "LOW",
+              "SAFE",
+              "HIGH",
+              "WIN"
+            ]
+          },
+          "legend": {
+            "orientation": "h",
+            "xanchor": "center",
+            "x": 0.5,
+            "y": -0.1,
+            "itemsizing": "constant",
+            "itemwidth": 40,
+            "itemclick": "toggle",
+            "itemdoubleclick": "toggleothers",
+            "font": {
+              "size": 8,
+              "family": {
+                "families": "'Signika Negative'",
+                "html_deps": [
+                  "function () ",
+                  "dep_func(x)"
+                ],
+                "default_flag": true
+              }
+            }
+          },
+          "hovermode": "closest",
+          "showlegend": true
+        },
+        "source": "A",
+        "config": {
+          "modeBarButtonsToAdd": [
+            "hoverclosest",
+            "hovercompare"
+          ],
+          "showSendToCloud": false
+        },
+        "data": [
+          {
+            "x": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "y": [
+              "SAFE",
+              "LOW",
+              "SAFE",
+              "BTM"
+            ],
+            "mode": "lines+markers",
+            "type": "scatter",
+            "name": "Charlie Hides",
+            "marker": {
+              "color": "rgba(102,194,165,1)",
+              "line": {
+                "color": "rgba(102,194,165,1)"
+              }
+            },
+            "textfont": {
+              "color": "rgba(102,194,165,1)"
+            },
+            "error_y": {
+              "color": "rgba(102,194,165,1)"
+            },
+            "error_x": {
+              "color": "rgba(102,194,165,1)"
+            },
+            "line": {
+              "color": "rgba(102,194,165,1)"
+            },
+            "xaxis": "x",
+            "yaxis": "y",
+            "frame": null
+          },
+          {
+            "x": [
+              1,
+              null,
+              3,
+              4,
+              5,
+              6
+            ],
+            "y": [
+              "BTM",
+              null,
+              "SAFE",
+              "SAFE",
+              "LOW",
+              "BTM"
+            ],
+            "mode": "lines+markers",
+            "type": "scatter",
+            "name": "Tamisha Iman",
+            "marker": {
+              "color": "rgba(141,160,203,1)",
+              "line": {
+                "color": "rgba(141,160,203,1)"
+              }
+            },
+            "textfont": {
+              "color": "rgba(141,160,203,1)"
+            },
+            "error_y": {
+              "color": "rgba(141,160,203,1)"
+            },
+            "error_x": {
+              "color": "rgba(141,160,203,1)"
+            },
+            "line": {
+              "color": "rgba(141,160,203,1)"
+            },
+            "xaxis": "x",
+            "yaxis": "y",
+            "frame": null
+          }
+        ],
+        "highlight": {
+          "on": "plotly_click",
+          "persistent": false,
+          "dynamic": false,
+          "selectize": false,
+          "opacityDim": 0.2,
+          "selected": {
+            "opacity": 1
+          },
+          "debounce": 0
+        },
+        "shinyEvents": [
+          "plotly_hover",
+          "plotly_click",
+          "plotly_selected",
+          "plotly_relayout",
+          "plotly_brushed",
+          "plotly_brushing",
+          "plotly_clickannotation",
+          "plotly_doubleclick",
+          "plotly_deselect",
+          "plotly_afterplot",
+          "plotly_sunburstclick"
+        ],
+        "base_url": "https://plot.ly"
+      },
+      "evals": [
+
+      ],
+      "jsHooks": [
+
+      ],
+      "deps": [
+        {
+          "name": "setprototypeof",
+          "version": "0.1",
+          "src": {
+            "href": "setprototypeof-0.1"
+          },
+          "meta": null,
+          "script": "setprototypeof.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": false
+        },
+        {
+          "name": "typedarray",
+          "version": "0.1",
+          "src": {
+            "href": "typedarray-0.1"
+          },
+          "meta": null,
+          "script": "typedarray.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": false
+        },
+        {
+          "name": "jquery",
+          "version": "3.5.1",
+          "src": {
+            "href": "jquery-3.5.1"
+          },
+          "meta": null,
+          "script": "jquery.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "crosstalk",
+          "version": "1.2.0",
+          "src": {
+            "href": "crosstalk-1.2.0"
+          },
+          "meta": null,
+          "script": "js/crosstalk.min.js",
+          "stylesheet": "css/crosstalk.min.css",
+          "head": null,
+          "attachment": null,
+          "all_files": true
+        },
+        {
+          "name": "plotly-htmlwidgets-css",
+          "version": "2.11.1",
+          "src": {
+            "href": "plotly-htmlwidgets-css-2.11.1"
+          },
+          "meta": null,
+          "script": null,
+          "stylesheet": "plotly-htmlwidgets.css",
+          "head": null,
+          "attachment": null,
+          "all_files": false
+        },
+        {
+          "name": "plotly-main",
+          "version": "2.11.1",
+          "src": {
+            "href": "plotly-main-2.11.1"
+          },
+          "meta": null,
+          "script": "plotly-latest.min.js",
+          "stylesheet": null,
+          "head": null,
+          "attachment": null,
+          "all_files": false
+        }
+      ]
+    }
+  }
+}
