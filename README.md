@@ -1,5 +1,9 @@
 # dragracerviz
 
+![testing](https://github.com/UBC-MDS/dragracerviz/actions/workflows/testing.yml/badge.svg)
+![deployment](https://github.com/UBC-MDS/dragracerviz/actions/workflows/deploy-app.yaml/badge.svg)
+
+
 This dashboard is hosted on `shinyapps.io`, [here](https://wispyisle.shinyapps.io/dragracer-dashboard/).
 
 ## Contributors
