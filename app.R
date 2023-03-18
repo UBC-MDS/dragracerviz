@@ -7,6 +7,7 @@ library(bslib)
 library(leaflet)
 library(thematic)
 library(shinycssloaders)
+library(shinytest2)
 
 thematic::thematic_shiny()
 
